@@ -4,8 +4,6 @@ using SmartAgent.Data;
 using SmartAgent.Models;
 using Microsoft.AspNetCore.Authorization;
 
-
-
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
@@ -18,52 +16,46 @@ public class UsersController : ControllerBase
         _context = context;
     }
 
-    // GET: api/users
     [HttpGet]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Get()
     {
-        var users = await _context.Users.ToListAsync();
+        // Nunca devuelvas el hash de contraseña
+        var users = await _context.Users
+            .Select(u => new { u.Id, u.Name, u.Email, u.Role, u.CreatedAt })
+            .ToListAsync();
         return Ok(users);
     }
 
-    // POST: api/users
-    [HttpPost]
-    public async Task<IActionResult> Create(User user)
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetById(Guid id)
     {
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync();
-        return Ok(user);
+        var user = await _context.Users.FindAsync(id); // ahora Guid coincide
+        if (user == null) return NotFound();
+        return Ok(new { user.Id, user.Name, user.Email, user.Role });
     }
 
-    // PUT: api/users/5
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, User user)
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> Update(Guid id, User user)
     {
-        var existingUser = await _context.Users.FindAsync(id);
+        var existing = await _context.Users.FindAsync(id);
+        if (existing == null) return NotFound();
 
-        if (existingUser == null)
-            return NotFound();
-
-        existingUser.Name = user.Name;
-        existingUser.Email = user.Email;
-
+        existing.Name = user.Name;
+        existing.Email = user.Email;
         await _context.SaveChangesAsync();
-
-        return Ok(existingUser);
+        return Ok(new { existing.Id, existing.Name, existing.Email });
     }
 
-    // DELETE: api/users/5
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
+    [HttpDelete("{id:guid}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Delete(Guid id)
     {
         var user = await _context.Users.FindAsync(id);
-
-        if (user == null)
-            return NotFound();
+        if (user == null) return NotFound();
 
         _context.Users.Remove(user);
         await _context.SaveChangesAsync();
-
-        return Ok("Eliminado");
+        return Ok("Usuario eliminado");
     }
 }
