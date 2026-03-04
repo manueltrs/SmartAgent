@@ -2,10 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using SmartAgent.Data;
 using SmartAgent.Models;
+using Microsoft.AspNetCore.Authorization;
+
 
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class UsersController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
