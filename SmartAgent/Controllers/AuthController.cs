@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BCrypt.Net;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using SmartAgent.Data;
+using SmartAgent.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using SmartAgent.Data;
-using SmartAgent.Models;
-using BCrypt.Net;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -67,5 +68,26 @@ public class AuthController : ControllerBase
             signingCredentials: creds);
 
         return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
+    }
+
+    [HttpPost("register-admin")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> RegisterAdmin(LoginDto dto)
+    {
+        if (_context.Users.Any(u => u.Email == dto.Email))
+            return BadRequest("El email ya está registrado");
+
+        var user = new User
+        {
+            Id = Guid.NewGuid(),
+            Name = dto.Email.Split('@')[0],
+            Email = dto.Email,
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
+            Role = "Admin"
+        };
+
+        _context.Users.Add(user);
+        await _context.SaveChangesAsync();
+        return Ok(new { message = "Admin creado", userId = user.Id });
     }
 }
