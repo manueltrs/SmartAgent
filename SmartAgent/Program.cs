@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +7,8 @@ using SmartAgent.Data;
 using SmartAgent.Services;
 using System.Text;
 
+=======
+>>>>>>> 730af5ec733075e8cda8c13dbbac3524132504db
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
@@ -18,6 +21,7 @@ builder.Services.AddCors(options =>
     });
 });
 
+<<<<<<< HEAD
 // Base de datos
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -94,6 +98,8 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+=======
+>>>>>>> 730af5ec733075e8cda8c13dbbac3524132504db
 var app = builder.Build();
 
 app.UseSwagger();
