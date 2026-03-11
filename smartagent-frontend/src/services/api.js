@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5292/api';cd C: \Users\mjuli\Source\Repos\SmartAgent
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5292/api';
 
 const api = axios.create({
     baseURL: API_URL,
