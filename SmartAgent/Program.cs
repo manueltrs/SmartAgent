@@ -1,6 +1,10 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using SmartAgent.Data;
-
+using SmartAgent.Services;
+using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
