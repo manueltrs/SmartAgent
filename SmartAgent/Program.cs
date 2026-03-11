@@ -19,7 +19,7 @@ builder.Services.AddCors(options =>
 
 // Convertir DATABASE_URL de Railway a formato Npgsql
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-if (connectionString != null && connectionString.StartsWith("postgres://"))
+if (connectionString != null && (connectionString.StartsWith("postgres://") || connectionString.StartsWith("postgresql://")))
 {
     var uri = new Uri(connectionString);
     var userInfo = uri.UserInfo.Split(':');
