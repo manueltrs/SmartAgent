@@ -69,6 +69,8 @@ namespace SmartAgent.Tests
             var result = controller.Login(dto);
 
             Assert.IsType<UnauthorizedObjectResult>(result);
+
+            // Pruebas unitarias SmartAgent
         }
     }
 }
