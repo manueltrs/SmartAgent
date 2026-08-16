@@ -126,5 +126,5 @@ using (var scope = app.Services.CreateScope())
         Console.WriteLine($"Migracion omitida: {ex.Message}");
     }
 }
-
+app.MapMetrics(); // expone endpoint /metrics
 app.Run();
