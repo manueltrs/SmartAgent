@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using SmartAgent.Data;
 using SmartAgent.Services;
 using System.Text;
+using Prometheus;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
