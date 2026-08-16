@@ -1,32 +1,24 @@
 # 🤖 SmartAgent
 
-> Plataforma web full-stack para la gestión y ejecución de **agentes de inteligencia artificial** especializados, potenciada por Llama 3.3 70B via Groq API.
+Plataforma web full-stack para la gestión y ejecución de agentes de inteligencia artificial especializados, potenciada por Llama 3.3 70B via Groq API.
 
-[![Deploy Frontend](https://img.shields.io/badge/Frontend-Vercel-black?logo=vercel)](https://smart-agent-puce.vercel.app)
-[![Deploy Backend](https://img.shields.io/badge/Backend-Railway-purple?logo=railway)](https://gallant-expression-production-e13d.up.railway.app/swagger)
-[![CI/CD](https://img.shields.io/badge/CI%2FCD-Jenkins-red?logo=jenkins)](http://localhost:8080)
-[![Tests](https://img.shields.io/badge/Tests-12%20passing-brightgreen?logo=xunit)]()
-[![.NET](https://img.shields.io/badge/.NET-8.0-blue?logo=dotnet)](https://dotnet.microsoft.com)
-[![React](https://img.shields.io/badge/React-Vite-61DAFB?logo=react)](https://vitejs.dev)
-
----
+`Deploy Frontend` `Deploy Backend` `CI/CD` `Tests` `.NET` `React` `Quality Gate: SonarCloud`
 
 ## 🌐 Demo en Vivo
 
 | Plataforma | URL |
-|------------|-----|
-| 🖥️ Frontend | [smart-agent-puce.vercel.app](https://smart-agent-puce.vercel.app) |
-| ⚙️ Backend API | [gallant-expression-production-e13d.up.railway.app](https://gallant-expression-production-e13d.up.railway.app) |
-| 📚 Swagger | [/swagger](https://gallant-expression-production-e13d.up.railway.app/swagger) |
-| 💻 GitHub | [github.com/manueltrs/SmartAgent](https://github.com/manueltrs/SmartAgent) |
-
----
+|---|---|
+| 🖥️ Frontend | smart-agent-puce.vercel.app |
+| ⚙️ Backend API | gallant-expression-production-e13d.up.railway.app |
+| 📚 Swagger | `/swagger` |
+| 📊 Calidad de código | [SonarCloud Dashboard](https://sonarcloud.io/dashboard?id=manueltrs_SmartAgent) |
+| 💻 GitHub | github.com/manueltrs/SmartAgent |
 
 ## 📋 Tabla de Contenidos
 
 - [Descripción](#-descripción)
-- [Stack Tecnológico](#-stack-tecnológico)
-- [Arquitectura](#-arquitectura)
+- [Stack Tecnológico](#️-stack-tecnológico)
+- [Arquitectura](#️-arquitectura)
 - [Funcionalidades](#-funcionalidades)
 - [Tipos de Agentes](#-tipos-de-agentes)
 - [API Endpoints](#-api-endpoints)
@@ -35,24 +27,24 @@
 - [Variables de Entorno](#-variables-de-entorno)
 - [Pruebas](#-pruebas)
 - [CI/CD con Jenkins](#-cicd-con-jenkins)
-- [Despliegue](#-despliegue)
+- [Calidad de Código con SonarQube](#-calidad-de-código-con-sonarqube)
+- [Gestión de Proyecto con Jira](#-gestión-de-proyecto-con-jira)
+- [Monitoreo (Grafana + Prometheus)](#-monitoreo-grafana--prometheus)
+- [Despliegue](#️-despliegue)
 - [Autor](#-autor)
-
----
 
 ## 📖 Descripción
 
-SmartAgent es una plataforma web completa que permite a los usuarios crear, gestionar y ejecutar agentes de inteligencia artificial especializados. Cada agente está optimizado para un dominio específico — desde resumir textos hasta generar código — utilizando el modelo **Llama 3.3 70B** a través de la API de Groq.
+SmartAgent es una plataforma web completa que permite a los usuarios crear, gestionar y ejecutar agentes de inteligencia artificial especializados. Cada agente está optimizado para un dominio específico — desde resumir textos hasta generar código — utilizando el modelo Llama 3.3 70B a través de la API de Groq.
 
 El sistema incluye autenticación segura con JWT, control de acceso basado en roles (Admin/User), procesamiento asíncrono de tareas en segundo plano y un dashboard completo con estadísticas en tiempo real.
-
----
 
 ## 🛠️ Stack Tecnológico
 
 ### Backend
+
 | Tecnología | Versión | Uso |
-|------------|---------|-----|
+|---|---|---|
 | C# / ASP.NET Core | .NET 8.0 | Framework principal |
 | Entity Framework Core | 8.0.0 | ORM y migraciones |
 | PostgreSQL | 17 | Base de datos en producción |
@@ -62,28 +54,31 @@ El sistema incluye autenticación segura con JWT, control de acceso basado en ro
 | Swashbuckle | 6.5.0 | Documentación Swagger |
 
 ### Frontend
+
 | Tecnología | Uso |
-|------------|-----|
+|---|---|
 | React + Vite | Framework y bundler |
 | Axios | Cliente HTTP con interceptores JWT |
 | React Router DOM | Navegación SPA |
 
 ### IA
+
 | Tecnología | Uso |
-|------------|-----|
+|---|---|
 | Groq API | Proveedor de inferencia |
 | Llama 3.3 70B | Modelo de lenguaje |
 
-### Infraestructura
+### Infraestructura y Calidad
+
 | Herramienta | Uso |
-|-------------|-----|
+|---|---|
 | Railway | Backend + PostgreSQL en producción |
 | Vercel | Frontend en producción |
 | Docker | Contenedorización del backend |
 | GitHub | Control de versiones + CI/CD trigger |
-| Jenkins | Pipeline de pruebas automatizadas |
-
----
+| Jenkins | Pipeline de pruebas automatizadas (local, Windows service) |
+| SonarCloud | Análisis estático de calidad de código, integrado al pipeline de CI |
+| Jira | Tablero Kanban de gestión y seguimiento de tareas del proyecto |
 
 ## 🏗️ Arquitectura
 
@@ -114,15 +109,13 @@ El sistema incluye autenticación segura con JWT, control de acceso basado en ro
 └──────────────────┘      └───────────────────────┘
 ```
 
----
-
 ## ✨ Funcionalidades
 
 ### 🔐 Autenticación y Seguridad
 - Registro de usuarios con validación de email único
 - Login con JWT de 2 horas de expiración
 - Contraseñas protegidas con BCrypt
-- Sistema de roles: **Admin** y **User**
+- Sistema de roles: Admin y User
 - Protección de rutas tanto en frontend como en backend
 
 ### 🤖 Gestión de Agentes
@@ -144,51 +137,48 @@ El sistema incluye autenticación segura con JWT, control de acceso basado en ro
 
 ### ⚙️ Background Service
 - Procesamiento asíncrono de tareas cada 15 segundos
-- Estados de tarea: `Pending` → `Running` → `Completed` / `Failed`
-
----
+- Estados de tarea: Pending → Running → Completed / Failed
 
 ## 🤖 Tipos de Agentes
 
 | Tipo | Descripción | Capacidades |
-|------|-------------|-------------|
-| **Asistente** | Asistente general | Responde preguntas, da información |
-| **Resumidor** | Síntesis de textos | Resume con conteo de palabras |
-| **Traductor** | Traducción multilenguaje | Traduce entre cualquier par de idiomas |
-| **Analista** | Análisis de datos | Identifica patrones, genera conclusiones |
-| **Programador** | Desarrollo de software | Genera código con explicaciones |
-
----
+|---|---|---|
+| Asistente | Asistente general | Responde preguntas, da información |
+| Resumidor | Síntesis de textos | Resume con conteo de palabras |
+| Traductor | Traducción multilenguaje | Traduce entre cualquier par de idiomas |
+| Analista | Análisis de datos | Identifica patrones, genera conclusiones |
+| Programador | Desarrollo de software | Genera código con explicaciones |
 
 ## 📡 API Endpoints
 
 ### Autenticación
+
 | Método | Endpoint | Auth | Descripción |
-|--------|----------|------|-------------|
-| `POST` | `/api/auth/register` | ❌ | Registrar nuevo usuario |
-| `POST` | `/api/auth/login` | ❌ | Login, retorna JWT |
-| `POST` | `/api/auth/register-admin` | 👑 Admin | Crear administrador |
+|---|---|---|---|
+| POST | `/api/auth/register` | ❌ | Registrar nuevo usuario |
+| POST | `/api/auth/login` | ❌ | Login, retorna JWT |
+| POST | `/api/auth/register-admin` | 👑 Admin | Crear administrador |
 
 ### Agentes
+
 | Método | Endpoint | Auth | Descripción |
-|--------|----------|------|-------------|
-| `GET` | `/api/agents` | ✅ User | Mis agentes |
-| `POST` | `/api/agents` | ✅ User | Crear agente |
-| `POST` | `/api/agents/{id}/execute` | ✅ User | Ejecutar tarea con IA |
-| `GET` | `/api/agents/{id}/tasks` | ✅ User | Historial de tareas |
-| `GET` | `/api/agents/all` | 👑 Admin | Todos los agentes |
-| `GET` | `/api/agents/all-tasks` | 👑 Admin | Todas las tareas |
-| `PUT` | `/api/agents/{id}/toggle` | 👑 Admin | Activar/desactivar |
+|---|---|---|---|
+| GET | `/api/agents` | ✅ User | Mis agentes |
+| POST | `/api/agents` | ✅ User | Crear agente |
+| POST | `/api/agents/{id}/execute` | ✅ User | Ejecutar tarea con IA |
+| GET | `/api/agents/{id}/tasks` | ✅ User | Historial de tareas |
+| GET | `/api/agents/all` | 👑 Admin | Todos los agentes |
+| GET | `/api/agents/all-tasks` | 👑 Admin | Todas las tareas |
+| PUT | `/api/agents/{id}/toggle` | 👑 Admin | Activar/desactivar |
 
 ### Usuarios
-| Método | Endpoint | Auth | Descripción |
-|--------|----------|------|-------------|
-| `GET` | `/api/users` | 👑 Admin | Listar usuarios |
-| `GET` | `/api/users/{id}` | ✅ User | Ver usuario |
-| `PUT` | `/api/users/{id}` | ✅ User | Actualizar usuario |
-| `DELETE` | `/api/users/{id}` | ✅ User | Eliminar usuario |
 
----
+| Método | Endpoint | Auth | Descripción |
+|---|---|---|---|
+| GET | `/api/users` | 👑 Admin | Listar usuarios |
+| GET | `/api/users/{id}` | ✅ User | Ver usuario |
+| PUT | `/api/users/{id}` | ✅ User | Actualizar usuario |
+| DELETE | `/api/users/{id}` | ✅ User | Eliminar usuario |
 
 ## 📁 Estructura del Proyecto
 
@@ -226,6 +216,8 @@ SmartAgent/
 │   ├── vercel.json                      # Config routing SPA
 │   └── vite.config.js
 │
+├── SmartAgent.sln                       # Solución .NET (usada por SonarScanner)
+│
 └── SmartAgent.Tests/                    # Proyecto de pruebas xUnit
     ├── AuthControllerTests.cs           # Pruebas unitarias
     ├── AgentsControllerTests.cs         # Pruebas de integración
@@ -234,15 +226,13 @@ SmartAgent/
     └── TestHelpers.cs                   # Utilidades de prueba
 ```
 
----
-
 ## 🚀 Instalación Local
 
 ### Prerequisitos
-- [.NET 8.0 SDK](https://dotnet.microsoft.com/download)
-- [Node.js 18+](https://nodejs.org)
-- [SQL Server Express](https://www.microsoft.com/sql-server) o PostgreSQL
-- Groq API Key (gratis en [console.groq.com](https://console.groq.com))
+- .NET 8.0 SDK
+- Node.js 18+
+- SQL Server Express o PostgreSQL
+- Groq API Key (gratis en console.groq.com)
 
 ### Backend
 
@@ -281,11 +271,10 @@ npm run dev
 
 El frontend estará disponible en `http://localhost:5173`
 
----
-
 ## 🔐 Variables de Entorno
 
-### Backend (`appsettings.Development.json`)
+### Backend (appsettings.Development.json)
+
 ```json
 {
   "ConnectionStrings": {
@@ -303,6 +292,7 @@ El frontend estará disponible en `http://localhost:5173`
 ```
 
 ### Railway (Producción)
+
 ```
 ConnectionStrings__DefaultConnection = postgresql://...
 Jwt__Key = tu_clave_secreta
@@ -314,83 +304,108 @@ PORT = 8080
 ```
 
 ### Frontend (Vercel)
+
 ```
 VITE_API_URL = https://gallant-expression-production-e13d.up.railway.app/api
 ```
 
----
-
 ## 🧪 Pruebas
 
-El proyecto cuenta con **12 pruebas automatizadas** distribuidas en 4 categorías:
+El proyecto cuenta con 12 pruebas automatizadas distribuidas en 4 categorías:
 
 ```bash
 cd SmartAgent.Tests
 dotnet test
 ```
 
-### Pruebas Unitarias (`AuthControllerTests.cs`) — 3 pruebas
+**Pruebas Unitarias** (`AuthControllerTests.cs`) — 3 pruebas
 - ✅ Registro exitoso con datos válidos
 - ✅ Rechazo de email duplicado
 - ✅ Login con credenciales inválidas retorna 401
 
-### Pruebas de Integración (`AgentsControllerTests.cs`) — 3 pruebas
+**Pruebas de Integración** (`AgentsControllerTests.cs`) — 3 pruebas
 - ✅ Crear agente retorna 200
 - ✅ Lista vacía cuando no hay agentes
 - ✅ Lista con agentes creados
 
-### Pruebas de Seguridad (`SecurityTests.cs`) — 4 pruebas
+**Pruebas de Seguridad** (`SecurityTests.cs`) — 4 pruebas
 - ✅ Usuario no ve agentes de otros usuarios
 - ✅ Login con password incorrecta retorna 401
 - ✅ Registro con email duplicado retorna 400
 - ✅ Agente inactivo no puede ejecutar tareas
 
-### Pruebas de Carga (`LoadTests.cs`) — 2 pruebas con NBomber
+**Pruebas de Carga** (`LoadTests.cs`) — 2 pruebas con NBomber
 - ✅ 50 peticiones concurrentes de creación — 0 errores, latencia promedio 1.21ms
 - ✅ 100 peticiones concurrentes de consulta — 0 errores, latencia promedio 1.93ms
 
----
-
 ## 🔄 CI/CD con Jenkins
 
-El proyecto tiene un pipeline de CI/CD configurado con Jenkins que ejecuta todas las pruebas automáticamente cada 5 minutos o al detectar cambios en el repositorio.
+El proyecto tiene un pipeline de CI/CD configurado con Jenkins (corriendo localmente como servicio de Windows) que ejecuta pruebas y análisis de calidad automáticamente cada 5 minutos o al detectar cambios en el repositorio.
 
 ### Configuración del Pipeline
+
 - **Trigger:** Polling SCM cada 5 minutos (`H/5 * * * *`)
 - **Source:** `https://github.com/manueltrs/SmartAgent.git`
 - **Branch:** `master`
-- **Comando:** `cd SmartAgent.Tests && dotnet test --logger "trx;LogFileName=test-results.trx"`
+- **Pasos del build:**
+  1. Compilar la solución completa (`dotnet build SmartAgent.sln`)
+  2. Ejecutar pruebas (`dotnet test SmartAgent.Tests/SmartAgent.Tests.csproj`)
+  3. Análisis estático de código con SonarCloud (`dotnet-sonarscanner`)
 
 ### Flujo de CI/CD completo
+
 ```
-git push → GitHub → Jenkins (pruebas) → Railway (backend) → Vercel (frontend)
+git push → GitHub → Jenkins (build + tests + SonarQube) → Railway (backend) → Vercel (frontend)
 ```
 
----
+## 📊 Calidad de Código con SonarQube
+
+El análisis estático corre en cada build de Jenkins vía **SonarCloud**, cubriendo el backend (C#) y el frontend (JS/TS/CSS).
+
+- **Dashboard:** [sonarcloud.io/dashboard?id=manueltrs_SmartAgent](https://sonarcloud.io/dashboard?id=manueltrs_SmartAgent)
+- **Project Key:** `manueltrs_SmartAgent`
+- **Integración:** CI-based analysis desde Jenkins (Automatic Analysis de SonarCloud desactivado para evitar conflicto)
+- **Reglas activas:** perfil "Sonar way" para C#, JS, CSS, JSON, Docker y HTML
+
+## 📌 Gestión de Proyecto con Jira
+
+El seguimiento de tareas del proyecto se gestiona en un tablero **Kanban** en Jira (proyecto `KAN`), con las columnas `To Do → In Progress → In Review → Done`.
+
+Ejemplos de tareas registradas:
+- Configurar SonarQube en CI
+- Reactivar backend en Railway
+- Configurar Grafana + Prometheus
+- Documentar pipeline de Jenkins
+
+## 📈 Monitoreo (Grafana + Prometheus)
+
+> **Estado: pendiente de implementación.**
+
+Está planeado exponer métricas del backend (.NET) mediante `prometheus-net.AspNetCore` en un endpoint `/metrics`, con recolección y visualización a través de Grafana Cloud (Prometheus gestionado). Requiere que el backend esté desplegado con URL pública accesible para el scraping.
 
 ## ☁️ Despliegue
 
 ### Backend en Railway
-1. Crear nuevo proyecto en [railway.app](https://railway.app)
+
+1. Crear nuevo proyecto en railway.app
 2. Conectar repositorio GitHub
-3. Configurar **Root Directory:** `SmartAgent/SmartAgent`
+3. Configurar Root Directory: `SmartAgent/SmartAgent`
 4. Agregar servicio PostgreSQL
 5. Configurar variables de entorno
-6. Railway detecta el `Dockerfile` automáticamente
+6. Railway detecta el Dockerfile automáticamente
 
 ### Frontend en Vercel
-1. Importar repositorio en [vercel.com](https://vercel.com)
-2. Configurar **Root Directory:** `smartagent-frontend`
-3. Agregar variable `VITE_API_URL`
-4. Deploy automático en cada push a `master`
 
----
+1. Importar repositorio en vercel.com
+2. Configurar Root Directory: `smartagent-frontend`
+3. Agregar variable `VITE_API_URL`
+4. Deploy automático en cada push a master
 
 ## 🗄️ Base de Datos
 
 ### Esquema
 
-```sql
+```
 Users
 ├── Id (UUID, PK)
 ├── Name (VARCHAR)
@@ -418,19 +433,16 @@ Tasks
 └── CreatedAt (TIMESTAMP)
 ```
 
----
-
 ## 👨‍💻 Autor
 
 **Jose Manuel Torres Mendez**
+
 - 📧 mjulianm29@gmail.com
 - 📱 +57 3150012716
-- 🐙 [github.com/manueltrs](https://github.com/manueltrs)
+- 🐙 github.com/manueltrs
 - 📍 Bogotá, Colombia
 
 Estudiante de Ingeniería de Software — Universitaria de Colombia
-
----
 
 ## 📄 Licencia
 
@@ -438,6 +450,4 @@ Este proyecto es de uso educativo y personal.
 
 ---
 
-<div align="center">
-  <strong>⭐ Si te gustó el proyecto, dale una estrella en GitHub ⭐</strong>
-</div>
+⭐ Si te gustó el proyecto, dale una estrella en GitHub ⭐
