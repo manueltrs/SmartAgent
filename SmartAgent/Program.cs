@@ -104,6 +104,8 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+app.UseHttpMetrics();
+
 app.UseSwagger();
 app.UseSwaggerUI();
 
