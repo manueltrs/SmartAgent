@@ -1,8 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
-import Agents from './pages/Agents';
-import Execute from './pages/Execute';
 import Tasks from './pages/Tasks';
 
 function PrivateRoute({ children }) {
@@ -16,8 +14,6 @@ export default function App() {
             <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-                <Route path="/agents" element={<PrivateRoute><Agents /></PrivateRoute>} />
-                <Route path="/execute/:id" element={<PrivateRoute><Execute /></PrivateRoute>} />
                 <Route path="/tasks" element={<PrivateRoute><Tasks /></PrivateRoute>} />
                 <Route path="*" element={<Navigate to="/login" />} />
             </Routes>
