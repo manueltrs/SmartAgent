@@ -13,47 +13,51 @@ export default function Login() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const handleLogin = async () => {
-        setLoading(true);
-        setError('');
-        try {
-            const res = await api.post('/auth/login', { email, password });
-            localStorage.setItem('token', res.data.token);
-            const payload = JSON.parse(atob(res.data.token.split('.')[1]));
-            const role = payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-            localStorage.setItem('role', role);
-            navigate('/dashboard');
-        } catch (err) {
-            setError(err.response?.data || 'Credenciales incorrectas');
-        } finally {
-            setLoading(false);
-        }
-    };
+  const handleLogin = async () => {
+    setLoading(true);
+    setError('');
+    try {
+        const res = await api.post('/auth/login', { email, password });
+        localStorage.setItem('token', res.data.token);
+        const payload = JSON.parse(atob(res.data.token.split('.')[1]));
+        const role = payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+        localStorage.setItem('role', role);
+        navigate('/dashboard');
+    } catch (err) {
+        const data = err.response?.data;
+        const msg = typeof data === 'string' ? data : data?.message || data?.title || 'Credenciales incorrectas';
+        setError(msg);
+    } finally {
+        setLoading(false);
+    }
+};
 
-    const handleRegister = async () => {
-        setError('');
-        setSuccess('');
-        if (password !== confirmPassword) {
-            setError('Las contraseñas no coinciden');
-            return;
-        }
-        if (password.length < 6) {
-            setError('La contraseña debe tener al menos 6 caracteres');
-            return;
-        }
-        setLoading(true);
-        try {
-            await api.post('/auth/register', { email, password });
-            setSuccess('¡Usuario creado exitosamente! Ya puedes iniciar sesión.');
-            setMode('login');
-            setPassword('');
-            setConfirmPassword('');
-        } catch (err) {
-            setError(err.response?.data?.message || err.response?.data || 'Error al registrar');
-        } finally {
-            setLoading(false);
-        }
-    };
+const handleRegister = async () => {
+    setError('');
+    setSuccess('');
+    if (password !== confirmPassword) {
+        setError('Las contraseñas no coinciden');
+        return;
+    }
+    if (password.length < 6) {
+        setError('La contraseña debe tener al menos 6 caracteres');
+        return;
+    }
+    setLoading(true);
+    try {
+        await api.post('/auth/register', { email, password });
+        setSuccess('¡Usuario creado exitosamente! Ya puedes iniciar sesión.');
+        setMode('login');
+        setPassword('');
+        setConfirmPassword('');
+    } catch (err) {
+        const data = err.response?.data;
+        const msg = typeof data === 'string' ? data : data?.message || data?.title || (data?.errors ? Object.values(data.errors).flat().join(', ') : 'Error al registrar');
+        setError(msg);
+    } finally {
+        setLoading(false);
+    }
+};
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') mode === 'login' ? handleLogin() : handleRegister();
