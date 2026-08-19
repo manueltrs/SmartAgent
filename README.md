@@ -1,6 +1,6 @@
 # 🤖 SmartAgent
 
-Plataforma web full-stack para la gestión y ejecución de agentes de inteligencia artificial especializados, potenciada por Llama 3.3 70B via Groq API.
+Plataforma web full-stack para la gestión y ejecución de agentes de inteligencia artificial especializados, potenciada por GPT-OSS 120B via Groq API.
 
 `Deploy Frontend` `Deploy Backend` `CI/CD` `Tests` `.NET` `React` `Quality Gate: SonarCloud`
 
@@ -29,13 +29,13 @@ Plataforma web full-stack para la gestión y ejecución de agentes de inteligenc
 - [CI/CD con Jenkins](#-cicd-con-jenkins)
 - [Calidad de Código con SonarQube](#-calidad-de-código-con-sonarqube)
 - [Gestión de Proyecto con Jira](#-gestión-de-proyecto-con-jira)
-- [Monitoreo (Grafana + Prometheus)](#-monitoreo-grafana--prometheus)
+- [Monitoreo con Grafana + Prometheus](#-monitoreo-con-grafana--prometheus)
 - [Despliegue](#️-despliegue)
 - [Autor](#-autor)
 
 ## 📖 Descripción
 
-SmartAgent es una plataforma web completa que permite a los usuarios crear, gestionar y ejecutar agentes de inteligencia artificial especializados. Cada agente está optimizado para un dominio específico — desde resumir textos hasta generar código — utilizando el modelo Llama 3.3 70B a través de la API de Groq.
+SmartAgent es una plataforma web completa que permite a los usuarios crear, gestionar y ejecutar agentes de inteligencia artificial especializados. Cada agente está optimizado para un dominio específico — desde resumir textos hasta generar código — utilizando el modelo GPT-OSS 120B a través de la API de Groq.
 
 El sistema incluye autenticación segura con JWT, control de acceso basado en roles (Admin/User), procesamiento asíncrono de tareas en segundo plano y un dashboard completo con estadísticas en tiempo real.
 
@@ -66,7 +66,7 @@ El sistema incluye autenticación segura con JWT, control de acceso basado en ro
 | Tecnología | Uso |
 |---|---|
 | Groq API | Proveedor de inferencia |
-| Llama 3.3 70B | Modelo de lenguaje |
+| GPT-OSS 120B | Modelo de lenguaje (previamente Llama 3.3 70B, deprecado por Groq) |
 
 ### Infraestructura y Calidad
 
@@ -79,6 +79,9 @@ El sistema incluye autenticación segura con JWT, control de acceso basado en ro
 | Jenkins | Pipeline de pruebas automatizadas (local, Windows service) |
 | SonarCloud | Análisis estático de calidad de código, integrado al pipeline de CI |
 | Jira | Tablero Kanban de gestión y seguimiento de tareas del proyecto |
+| Prometheus (prometheus-net) | Instrumentación y exposición de métricas del backend en `/metrics` |
+| Grafana Alloy | Agente de recolección, hace scraping de `/metrics` (corre local como servicio) |
+| Grafana Cloud | Visualización de métricas — dashboard "SmartAgent Backend" |
 
 ## 🏗️ Arquitectura
 
@@ -105,7 +108,7 @@ El sistema incluye autenticación segura con JWT, control de acceso basado en ro
            ▼                          ▼
 ┌──────────────────┐      ┌───────────────────────┐
 │  PostgreSQL       │      │    Groq API           │
-│  (Railway)        │      │  Llama 3.3 70B        │
+│  (Railway)        │      │  GPT-OSS 120B         │
 └──────────────────┘      └───────────────────────┘
 ```
 
@@ -118,11 +121,12 @@ El sistema incluye autenticación segura con JWT, control de acceso basado en ro
 - Sistema de roles: Admin y User
 - Protección de rutas tanto en frontend como en backend
 
-### 🤖 Gestión de Agentes
-- Crear agentes personalizados con nombre, tipo y descripción
-- Listar agentes del usuario autenticado
-- Ejecutar tareas con respuesta de IA en tiempo real
-- Ver historial completo de tareas con estados
+### 🤖 Gestión de Agentes e Interfaz de Chat
+- Interfaz principal unificada tipo chat: selección de agente, historial conversacional y ejecución de tareas en una sola pantalla
+- Crear agentes personalizados con nombre, tipo y descripción sin salir del chat
+- Listar agentes del usuario autenticado con indicador de estado (activo/inactivo)
+- Ejecutar tareas con respuesta de IA en tiempo real, mostradas como burbujas de conversación
+- Ver historial completo de tareas de todos los agentes en una vista dedicada (`/tasks`) con filtros por estado
 
 ### 👑 Panel de Administración
 - Ver todos los agentes de todos los usuarios
@@ -208,11 +212,9 @@ SmartAgent/
 │   │   ├── services/
 │   │   │   └── api.js                   # Axios + interceptor JWT
 │   │   └── pages/
-│   │       ├── Login.jsx                # Login + registro
-│   │       ├── Dashboard.jsx            # Panel principal
-│   │       ├── Agents.jsx               # Gestión de agentes
-│   │       ├── Execute.jsx              # Ejecución de tareas
-│   │       └── Tasks.jsx                # Historial de tareas
+│   │       ├── Login.jsx                # Login + registro (UI futurista HUD)
+│   │       ├── Dashboard.jsx            # Interfaz principal tipo chat: selector de agentes, stats y conversación
+│   │       └── Tasks.jsx                # Historial completo de tareas de todos los agentes
 │   ├── vercel.json                      # Config routing SPA
 │   └── vite.config.js
 │
@@ -377,11 +379,30 @@ Ejemplos de tareas registradas:
 - Configurar Grafana + Prometheus
 - Documentar pipeline de Jenkins
 
-## 📈 Monitoreo (Grafana + Prometheus)
+## 📈 Monitoreo con Grafana + Prometheus
 
-> **Estado: pendiente de implementación.**
+El backend expone métricas en tiempo real mediante `prometheus-net.AspNetCore`, recolectadas por **Grafana Alloy** (corriendo localmente) y enviadas a **Grafana Cloud** (Prometheus gestionado) para su visualización.
 
-Está planeado exponer métricas del backend (.NET) mediante `prometheus-net.AspNetCore` en un endpoint `/metrics`, con recolección y visualización a través de Grafana Cloud (Prometheus gestionado). Requiere que el backend esté desplegado con URL pública accesible para el scraping.
+### Instrumentación
+
+- **Paquete:** `prometheus-net.AspNetCore`
+- **Middleware:** `app.UseHttpMetrics()` — mide automáticamente cada petición HTTP (duración, código de estado, endpoint)
+- **Endpoint expuesto:** `app.MapMetrics()` → `/metrics`
+- **URL pública:** `https://gallant-expression-production-e13d.up.railway.app/metrics`
+
+### Recolección
+
+- **Agente:** Grafana Alloy instalado como servicio de Windows, hace scraping periódico del endpoint `/metrics`
+- **Destino:** Grafana Cloud Hosted Prometheus (`remote_write`)
+
+### Dashboard
+
+Dashboard **"SmartAgent Backend"** en Grafana Cloud con los siguientes paneles:
+
+- **Requests por segundo** — `sum(rate(http_requests_received_total{job="prometheus.scrape.smartagent_backend"}[5m]))`
+- **Latencia promedio** — `rate(http_request_duration_seconds_sum{...}[5m]) / rate(http_request_duration_seconds_count{...}[5m])`
+- **Estado del servicio (up/down)** — `up{job="prometheus.scrape.smartagent_backend"}`
+- **Requests por código de estado** — `sum by (code) (rate(http_requests_received_total{...}[5m]))`
 
 ## ☁️ Despliegue
 
